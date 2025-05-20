@@ -11,9 +11,10 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
     implementation("org.apache.commons:commons-compress:1.27.1")
-    implementation("space.kscience:plotlykt-core:0.7.1.1")
+    implementation("org.jetbrains.kotlinx:kandy-lets-plot:0.8.0")
+    implementation("org.slf4j:slf4j-simple:2.0.13")
+
 }
 
 tasks.test {

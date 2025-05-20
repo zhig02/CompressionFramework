@@ -1,4 +1,4 @@
-package org.example.compressor.libs
+package compressor.libs
 
 import org.apache.commons.compress.compressors.lz4.BlockLZ4CompressorInputStream
 import org.apache.commons.compress.compressors.lz4.BlockLZ4CompressorOutputStream

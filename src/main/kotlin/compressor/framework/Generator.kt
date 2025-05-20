@@ -3,7 +3,6 @@ package compressor.framework
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import javax.lang.model.type.NullType
 import kotlin.math.abs
 import kotlin.math.ln
 import kotlin.math.log2
@@ -12,7 +11,7 @@ import kotlin.random.Random
 /**
  * Конфигурация генератора данных для тестирования алгоритмов сжатия.
  *
- * @property size Размер генерируемых данных в байтах
+ * @property originalSize Размер генерируемых данных в байтах
  * @property dataType Тип генерируемых данных
  * @property entropy Степень энтропии данных (от 0.0 до 1.0), где:
  *   - 0.0 означает минимальную энтропию (максимальную предсказуемость)
@@ -110,8 +109,8 @@ class DataGeneratorClass<T : Comparable<T>>(
 
     override fun generate(): ByteArray {
         val probabilities = calculateProbabilityFromEntropy()
-        val elementCount = (config.originalSize / config.dataType.bytesPerElement).toInt()
-        val buffer = ByteBuffer.allocate(config.originalSize.toInt())
+        val elementCount = (config.originalSize / config.dataType.bytesPerElement)
+        val buffer = ByteBuffer.allocate(config.originalSize)
         buffer.order(ByteOrder.nativeOrder())
 
         when (minValue) {
@@ -136,7 +135,7 @@ class DataGeneratorClass<T : Comparable<T>>(
                 }
 
                 array.shuffle()
-                println("generateInt:: array: ${array.contentToString()}")
+                //println("generateInt:: array: ${array.contentToString()}")
                 array.forEach { buffer.putInt(it) }
             }
 
@@ -161,7 +160,7 @@ class DataGeneratorClass<T : Comparable<T>>(
                 }
 
                 array.shuffle()
-                println("generateDouble:: array: ${array.contentToString()}")
+                //println("generateDouble:: array: ${array.contentToString()}")
                 array.forEach { buffer.putDouble(it) }
             }
 
@@ -186,7 +185,7 @@ class DataGeneratorClass<T : Comparable<T>>(
                 }
 
                 array.shuffle()
-                println("generateFloat:: array: ${array.contentToString()}")
+                //println("generateFloat:: array: ${array.contentToString()}")
                 array.forEach { buffer.putFloat(it) }
             }
 
@@ -211,13 +210,13 @@ class DataGeneratorClass<T : Comparable<T>>(
                 }
 
                 array.shuffle()
-                println(
-                    "generateByte:: array: [${
-                        array.joinToString(", ") { byte ->
-                            "0x%02X".format(byte.toInt() and 0xFF)
-                        }
-                    }]"
-                )
+//                println(
+//                    "generateByte:: array: [${
+//                        array.joinToString(", ") { byte ->
+//                            "0x%02X".format(byte.toInt() and 0xFF)
+//                        }
+//                    }]"
+//                )
                 return array // For Byte arrays, we can return directly
             }
 
@@ -317,6 +316,18 @@ fun <T> normalizedShannonEntropy(x: List<T>): Double {
     return normalizedEntropy
 }
 
+fun calculateEntropyFromBytes(data: ByteArray, dataType: DataType): Double {
+    val buffer = ByteBuffer.wrap(data).order(ByteOrder.nativeOrder())
+    val count = data.size / dataType.bytesPerElement
+    val values = when (dataType) {
+        DataType.INT    -> List(count)    { buffer.getInt()    }
+        DataType.DOUBLE -> List(count)    { buffer.getDouble() }
+        DataType.FLOAT  -> List(count)    { buffer.getFloat()  }
+        DataType.BYTE   -> data.toList()
+    }
+    return normalizedShannonEntropy(values)
+}
+
 fun reCalculationEntropy(filename: String, config: GeneratorConfig): Double {
     val file = File(filename)
     val data = file.readBytes()
@@ -333,7 +344,7 @@ fun reCalculationEntropy(filename: String, config: GeneratorConfig): Double {
     }
 
     val entropy = normalizedShannonEntropy(values)
-    println("${config.dataType} data entropy: $entropy")
+    //println("${config.dataType} data entropy: $entropy")
     return entropy
 }
 

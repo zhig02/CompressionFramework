@@ -1,8 +1,8 @@
 package compressor.framework
 
-import org.example.compressor.libs.GzipUtils
-import org.example.compressor.libs.Lz4Utils
-import org.example.compressor.libs.ZlibUtils
+import compressor.libs.GzipUtils
+import compressor.libs.Lz4Utils
+import compressor.libs.ZlibUtils
 import java.io.File
 import kotlin.io.readBytes
 

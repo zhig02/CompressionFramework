@@ -1,4 +1,4 @@
-package org.example.compressor.libs
+package compressor.libs
 import org.apache.commons.compress.compressors.deflate.DeflateCompressorInputStream
 import org.apache.commons.compress.compressors.deflate.DeflateCompressorOutputStream
 import java.io.*

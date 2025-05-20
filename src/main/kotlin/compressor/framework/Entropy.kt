@@ -63,7 +63,7 @@ fun <T> normalizedShannonEntropyK1(text: List<T>): Double {
     val totalLength = contexts.values.sumOf { it.size }.toDouble()
     var entropyK1 = 0.0
 
-    for ((context, nextChars) in contexts) {
+    for ((_, nextChars) in contexts) {
         val contextProb = nextChars.size / totalLength
 
         // Zero-order entropy for this context
@@ -116,12 +116,12 @@ fun entropyBits(probabilities: List<Double>): Double {
 
 fun main() {
     // Example data
-    val zero = List(10) { 1 }
-    val x = listOf(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
-    val y = (1..10).toList()
-    val z = List(10) { Random.nextDouble(-1000.0, 1000.0) }
-    val mississippi = "mississippimississippi"
-    val string0101 = "0101010101010101"
+    List(10) { 1 }
+    listOf(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
+    (1..10).toList()
+    List(10) { Random.nextDouble(-1000.0, 1000.0) }
+    "mississippimississippi"
+    "0101010101010101"
 
     // Read binary data file
     val file = File("data/kotlinDouble_0.1")

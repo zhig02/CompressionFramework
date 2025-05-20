@@ -1,4 +1,4 @@
-package org.example.compressor.libs
+package compressor.libs
 
 import java.io.*
 import java.nio.file.Files
